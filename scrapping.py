@@ -223,13 +223,12 @@ def scrape_event2():
 
 # Function to scrape Event 3
 def scrape_event3():
-    print("Scraping Event 1...")
+    print("Scraping Event 3...")
     
     # URLs for different pages of Event 1
-    main_url = 'https://b2bmarketing.exchange/east/'
-    registration_url = 'https://b2bmarketing.exchange/east/registration/'
-    agenda_url = 'https://b2bmarketing.exchange/east/agenda/'
-    
+    main_url = 'https://www.saastrannual2024.com/'
+    registration_url = 'https://www.saastrannual2024.com/buy-tickets'
+    agenda_url = 'https://www.saastrannual2024.com/'
     # Scrape main event page
     print(f"Fetching main event page: {main_url}")
     main_response = requests.get(main_url)
@@ -240,9 +239,9 @@ def scrape_event3():
     print(f"Event Name: {event_name}")
     
     # Location and Date
-    h3_tag = main_soup.find('h3', class_='elementor-heading-title elementor-size-default')
-    if h3_tag:
-        event_info = h3_tag.text.split('|')
+    h4_tag = main_soup.find('h4')
+    if h4_tag:
+        event_info = h4_tag.text.split('|')
         event_date = event_info[0].strip()
         location = event_info[1].strip()
         print(f"Event Date: {event_date}")
@@ -253,17 +252,17 @@ def scrape_event3():
         print("h3 tag not found.")
     
     # Description
-    description_tag = main_soup.find('div', class_='elementor-widget-text-editor')
+    description_tag = main_soup.find('div', class_='fe-block-65047d937a72ddaf3138123f')
     description = ""
     if description_tag:
-        spans = description_tag.find_all('span', class_='NormalTextRun SCXW261742822 BCX0')
-        description = ' '.join(span.text.strip() for span in spans)
+        description = description_tag.find('p').text.strip()
     else:
         description = "N/A"
     print(f"Description: {description}")
 
     # Key Speakers
-    key_speakers = [speaker.text.strip() for speaker in main_soup.find_all('div', class_='elementor-slide-heading')]
+    user_items_list_div = main_soup.find('div', class_='user-items-list')
+    key_speakers = [speaker.text.strip() for speaker in user_items_list_div.find_all('p')]
     print(f"Key Speakers: {key_speakers}")
 
     # Categories
@@ -294,15 +293,16 @@ def scrape_event3():
     print(f"Fetching registration page: {registration_url}")
     
     
-    registration_details_tag = registration_soup.find('div', class_='registration-details')
-    registration_details = registration_details_tag.text.strip() if registration_details_tag else "N/A"
+    registration_details = registration_soup.find('label', class_='newsletter-form-field-label title').text.strip()
     print(f"Registration Details: {registration_details}")
     
     #pricing
-    pricing = [ price.text.strip() for price in registration_soup.find_all('span', class_='elementor-price-table__integer-part')]
+    element=registration_soup.find_all('h2', class_='custom-color color-3 automation-total  hidePayment')
+    # pricing = [ price.text.strip() for price in element.find('span')]
+    pricing=[]
     print(f"Pricing: {pricing}")
 
-    print("Finished scraping Event 1.")
+    print("Finished scraping Event 3.")
     
     return {
         'Event Name': event_name,
