@@ -16,6 +16,7 @@ You can install the necessary Python packages using pip:
 
 ```bash
 pip install selenium beautifulsoup4 requests
+```
 
 ## output
 - is stored in b2b_events.csv and b2b_events.json
