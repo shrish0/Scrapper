@@ -443,10 +443,6 @@ def scrape_event5():
     
     # Parse the page source with BeautifulSoup
     main_soup = BeautifulSoup(page_source, 'html.parser')
-
-    # Save page source to a text file
-    with open('page_source.html', 'w', encoding='utf-8') as file:
-        file.write(page_source)
     
     # Event Name
     event_det= (main_soup.find('title').text.strip()).split(" | ")

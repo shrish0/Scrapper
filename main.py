@@ -1,6 +1,7 @@
 from scrapping import *
 import json
 import pandas as pd
+
 def compile_event_data():
     events_data = []
     events_data.append(scrape_event1())
