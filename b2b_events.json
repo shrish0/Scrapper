@@ -201,5 +201,37 @@
         "Pricing": [],
         "Categories": [],
         "Audience type": "N/A"
+    },
+    {
+        "Event Name": "Dreamforce 2024 - Salesforce.com US",
+        "Event Date(s)": "September 17-19, 2024",
+        "Location": "San Francisco, CA & Salesforce+",
+        "Website URL": "https://www.salesforce.com/dreamforce/",
+        "Description": "Join us at Dreamforce 2024, the world's largest event where you'll learn how to transform your company into an AI Enterprise. Save $1,000 with early bird passes. Register now!",
+        "Key Speakers": [
+            "Daniela Amodei",
+            "Kate Hudson",
+            "David B. Kirk",
+            "Raj Subramaniam",
+            "Matthew McConaughey",
+            "Crist\u00f3bal Valenzuela",
+            "Dev Patel",
+            "Sallie Krawcheck",
+            "will.i.am",
+            "Bob Sternfels",
+            "Robert Wolfe",
+            "More speakers to be announced!"
+        ],
+        "Agenda/Schedule": "N/A",
+        "Registration Details": [],
+        "Pricing": [
+            "$1,999",
+            "$2,499"
+        ],
+        "Categories": [
+            "Standard",
+            "Last Chance"
+        ],
+        "Audience type": "N/A"
     }
 ]

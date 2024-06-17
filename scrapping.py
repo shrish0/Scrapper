@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 # Setup Selenium WebDriver
 options = Options()
-options.add_argument("--headless")  # Run Chrome in headless mode (no GUI)
+# options.add_argument("--headless")  # Run Chrome in headless mode (no GUI)
 
 # Replace with your path to chromedriver executable
 chromedriver_path = 'chromedriver-win64/chromedriver.exe'  # Specify the path to your chromedriver executable
@@ -201,7 +201,7 @@ def scrape_event2():
         print("registration details:", registration_details)
         
     finally:
-        driver.quit()
+        pass
 
 
     print("Finished scraping Event 2.")
@@ -295,12 +295,113 @@ def scrape_event3():
     
     registration_details = registration_soup.find('label', class_='newsletter-form-field-label title').text.strip()
     print(f"Registration Details: {registration_details}")
-    
+
+    driver.set_window_size(800, 800)
     #pricing
-    element=registration_soup.find_all('h2', class_='custom-color color-3 automation-total  hidePayment')
-    # pricing = [ price.text.strip() for price in element.find('span')]
-    pricing=[]
-    print(f"Pricing: {pricing}")
+    
+
+    # Locate the nested <h2> element and extract the price
+  
+
+
+
+   #print(f"Pricing: {pricing}")
+
+    print("Finished scraping Event 3.")
+    
+    return {
+        'Event Name': event_name,
+        'Event Date(s)': event_date,
+        'Location': location,
+        'Website URL': main_url,
+        'Description': description,
+        'Key Speakers': key_speakers,
+        'Agenda/Schedule': schedule_text,
+        'Registration Details': registration_details,
+        'Pricing': [],
+        'Categories': categories,
+        'Audience type': audience_type
+    }
+
+
+#function to scrap 4
+def scrape_event4():
+    print("Scraping Event 3...")
+    
+    # URLs for different pages of Event 1
+    main_url = 'https://www.salesforce.com/dreamforce/'
+    registration_url = 'https://www.saastrannual2024.com/buy-tickets'
+    agenda_url = 'https://www.saastrannual2024.com/'
+    # Scrape main event page
+    print(f"Fetching main event page: {main_url}")
+    main_response = requests.get(main_url)
+    main_soup = BeautifulSoup(main_response.content, 'html.parser')
+    
+    # Event Name
+    event_name = main_soup.find('title').text.strip()
+    print(f"Event Name: {event_name}")
+    
+    # Location and Date
+    h4_tag = main_soup.find('h6',class_="rounded-full")
+    if h4_tag:
+        event_info = h4_tag.text.split('|')
+        event_date = event_info[0].strip()
+        location = event_info[1].strip()
+        print(f"Event Date: {event_date}")
+        print(f"Location: {location}")
+    else:
+        event_date = "N/A"
+        location = "N/A"
+        print("h3 tag not found.")
+    
+    # Description
+    meta_tag = main_soup.find('meta', {'name': 'description'})
+
+# Extract and print the content attribute of the meta tag
+    if meta_tag:
+        description = meta_tag.get('content')
+        print(description)
+    else:
+        print("Meta tag with name 'description' not found.")
+    print(f"Description: {description}")
+
+    # Key Speakers
+    key_speakers = [speaker.text.strip() for speaker in main_soup.find_all('h3',class_="heading-xxs")]
+    print(f"Key Speakers: {key_speakers}")
+
+    # Categories
+    categories = [category.text.strip() for category in main_soup.find_all('p', class_='heading-xs')]
+    categories=[categories[2],categories[3]]
+    print(f"Categories: {categories}")
+
+    # Audience Type
+    audience_type_tag = main_soup.find('div', class_='audience-type')
+    audience_type = audience_type_tag.text.strip() if audience_type_tag else "N/A"
+    print(f"Audience type: {audience_type}")
+
+    # Scrape schedule from agenda page
+    print(f"Fetching agenda page: {agenda_url}")
+    agenda_response = requests.get(agenda_url)
+    agenda_soup = BeautifulSoup(agenda_response.content, 'html.parser')
+    
+    
+    # Scrape schedule
+    schedule_tags = agenda_soup.find_all('h3', class_='sc-dab8fe09-5 fwiXyw')
+    
+    schedule = [tag.text.strip() for tag in schedule_tags]
+    schedule_text = ', '.join(schedule) if schedule else "N/A"
+    print(f"Agenda/Schedule: {schedule_text}")
+
+    # Scrape registration page
+    print(f"Fetching registration page: {registration_url}")
+    
+    
+    registration_details = []
+
+    #pricing
+    pricing = [_.text.strip() for _ in main_soup.find_all('p', class_='heading-sm')]
+    pricing=[pricing[1],pricing[2]]
+    print(f"Pricings: {pricing}")
 
     print("Finished scraping Event 3.")
     
@@ -317,5 +418,4 @@ def scrape_event3():
         'Categories': categories,
         'Audience type': audience_type
     }
-
 
