@@ -243,14 +243,30 @@
         "Location": "Boston, MA",
         "Website URL": "https://www.inbound.com/",
         "Description": "INBOUND is HubSpot\u2019s conference where business, marketing, and sales leaders connect and network with a diverse and inclusive community in Boston.",
-        "Key Speakers": [],
+        "Key Speakers": [
+            "Adam Jones",
+            "AJ Bruno",
+            "AJ Wilcox",
+            "Alanah Joseph",
+            "Alex Lieberman",
+            "Alex Rainford",
+            "Allyson Zook",
+            "Amy Maret",
+            "Anand Subbaraj",
+            "Andy Pitre",
+            "Anna Qi",
+            "Ari Murray"
+        ],
         "Agenda/Schedule": "N/A",
         "Registration Details": "Enter Email Address",
         "Pricing": [
             "USD $1,199",
             "USD $1,899"
         ],
-        "Categories": [],
+        "Categories": [
+            "General Admission Pass",
+            "VIP Pass"
+        ],
         "Audience type": "N/A"
     }
 ]

@@ -437,8 +437,16 @@ def scrape_event5():
     agenda_url = 'https://www.saastrannual2024.com/'
     # Scrape main event page
     print(f"Fetching main event page: {main_url}")
-    main_response = requests.get(main_url)
-    main_soup = BeautifulSoup(main_response.content, 'html.parser')
+    driver.get(main_url)
+    # Get the page source
+    page_source = driver.page_source
+    
+    # Parse the page source with BeautifulSoup
+    main_soup = BeautifulSoup(page_source, 'html.parser')
+
+    # Save page source to a text file
+    with open('page_source.html', 'w', encoding='utf-8') as file:
+        file.write(page_source)
     
     # Event Name
     event_det= (main_soup.find('title').text.strip()).split(" | ")
@@ -471,7 +479,11 @@ def scrape_event5():
     print(f"Description: {description}")
 
     # Key Speakers
-    key_speakers = [speaker.text.strip() for speaker in main_soup.find_all('h3',class_="heading-xxs")]
+    driver.get('https://www.inbound.com/speakers')
+
+    # Parse the page source with BeautifulSoup
+    speak_soup = BeautifulSoup(driver.page_source, 'html.parser')
+    key_speakers = [speaker.text.strip() for speaker in speak_soup.find_all('p',class_="speaker-card__name")]
     print(f"Key Speakers: {key_speakers}")
 
     # Categories
@@ -482,14 +494,12 @@ def scrape_event5():
     
     # Parse the page source with BeautifulSoup
     registration_soup = BeautifulSoup(page_source, 'html.parser')
-    # Save page source to a text file
-    with open('page_source.html', 'w', encoding='utf-8') as file:
-        file.write(page_source)
-    categories = [category.text.strip() for category in registration_soup.find_all('div', class_='ticket-details')]
+    
+    categories = [category.text.strip() for category in registration_soup.find_all('h3', class_='fs-52')]
     print(f"Categories: {categories}")
 
     # Audience Type
-    audience_type_tag = main_soup.find('div', class_='audience-type')
+    audience_type_tag = main_soup.find('h3', class_='audience-type')
     audience_type = audience_type_tag.text.strip() if audience_type_tag else "N/A"
     print(f"Audience type: {audience_type}")
 
