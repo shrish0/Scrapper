@@ -7,6 +7,7 @@ def compile_event_data():
     events_data.append(scrape_event2())
     events_data.append(scrape_event3())
     events_data.append(scrape_event4())
+    events_data.append(scrape_event5())
     # Add calls to other scraping functions here, e.g., scrape_event2(), scrape_event3(), etc.
     return events_data
 

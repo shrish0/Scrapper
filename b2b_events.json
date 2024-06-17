@@ -223,7 +223,10 @@
             "More speakers to be announced!"
         ],
         "Agenda/Schedule": "N/A",
-        "Registration Details": [],
+        "Registration Details": [
+            "Email",
+            "Password"
+        ],
         "Pricing": [
             "$1,999",
             "$2,499"
@@ -232,6 +235,22 @@
             "Standard",
             "Last Chance"
         ],
+        "Audience type": "N/A"
+    },
+    {
+        "Event Name": "INBOUND 2024 - HubSpot's Marketing & Sales Conference",
+        "Event Date(s)": "Sept 18-20, 2024",
+        "Location": "Boston, MA",
+        "Website URL": "https://www.inbound.com/",
+        "Description": "INBOUND is HubSpot\u2019s conference where business, marketing, and sales leaders connect and network with a diverse and inclusive community in Boston.",
+        "Key Speakers": [],
+        "Agenda/Schedule": "N/A",
+        "Registration Details": "Enter Email Address",
+        "Pricing": [
+            "USD $1,199",
+            "USD $1,899"
+        ],
+        "Categories": [],
         "Audience type": "N/A"
     }
 ]

@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 # Setup Selenium WebDriver
 options = Options()
-# options.add_argument("--headless")  # Run Chrome in headless mode (no GUI)
+options.add_argument("--headless")  # Run Chrome in headless mode (no GUI)
 
 # Replace with your path to chromedriver executable
 chromedriver_path = 'chromedriver-win64/chromedriver.exe'  # Specify the path to your chromedriver executable
@@ -326,11 +326,11 @@ def scrape_event3():
 
 #function to scrap 4
 def scrape_event4():
-    print("Scraping Event 3...")
+    print("Scraping Event 4...")
     
     # URLs for different pages of Event 1
     main_url = 'https://www.salesforce.com/dreamforce/'
-    registration_url = 'https://www.saastrannual2024.com/buy-tickets'
+    registration_url = 'https://reg.salesforce.com/flow/plus/df24/reg/login'
     agenda_url = 'https://www.saastrannual2024.com/'
     # Scrape main event page
     print(f"Fetching main event page: {main_url}")
@@ -394,16 +394,24 @@ def scrape_event4():
 
     # Scrape registration page
     print(f"Fetching registration page: {registration_url}")
-    
-    
-    registration_details = []
+    driver.get('https://reg.salesforce.com/flow/plus/df24/reg/login')
+
+    # Get the page source
+    page_source = driver.page_source
+
+    # Parse the page source with BeautifulSoup
+    registration_soup = BeautifulSoup(page_source, 'html.parser')
+
+    # Find the <span> element with class 'label-text' and data-test attribute 'rf-form-element-label'
+    registration_details = [ _.text.strip() for _ in registration_soup.findAll('span', {'class': 'label-text', 'data-test': 'rf-form-element-label'})]
+    print(f"registration_details: {registration_details}")
 
     #pricing
     pricing = [_.text.strip() for _ in main_soup.find_all('p', class_='heading-sm')]
     pricing=[pricing[1],pricing[2]]
     print(f"Pricings: {pricing}")
 
-    print("Finished scraping Event 3.")
+    print("Finished scraping Event 4.")
     
     return {
         'Event Name': event_name,
@@ -418,4 +426,111 @@ def scrape_event4():
         'Categories': categories,
         'Audience type': audience_type
     }
+
+#function to scrap 5
+def scrape_event5():
+    print("Scraping Event 5...")
+    
+    # URLs for different pages of Event 1
+    main_url = 'https://www.inbound.com/'
+    registration_url = 'https://www.inbound.com/register'
+    agenda_url = 'https://www.saastrannual2024.com/'
+    # Scrape main event page
+    print(f"Fetching main event page: {main_url}")
+    main_response = requests.get(main_url)
+    main_soup = BeautifulSoup(main_response.content, 'html.parser')
+    
+    # Event Name
+    event_det= (main_soup.find('title').text.strip()).split(" | ")
+    event_name = event_det[1]
+    event_date=event_det[2]
+    print(f"Event Name: {event_name}")
+    print(f"Event Date: {event_date}")
+    
+    # Location and Date
+    span_tag = main_soup.find('span',class_="eyebrow")
+    # print(span_tag.find_all('span'))
+    
+    if span_tag:
+        det = span_tag.find_all('span')
+        location=det[2].text.strip()
+        print(f"Location: {location}")
+    else:
+        event_date = "N/A"
+        location = "N/A"
+        print("h3 tag not found.")
+    
+    # Description
+    meta_tag = main_soup.find('meta', {'name': 'description'})
+
+# Extract and print the content attribute of the meta tag
+    if meta_tag:
+        description = meta_tag.get('content')
+    else:
+        print("Meta tag with name 'description' not found.")
+    print(f"Description: {description}")
+
+    # Key Speakers
+    key_speakers = [speaker.text.strip() for speaker in main_soup.find_all('h3',class_="heading-xxs")]
+    print(f"Key Speakers: {key_speakers}")
+
+    # Categories
+    driver.get(registration_url)
+
+    # Get the page source
+    page_source = driver.page_source
+    
+    # Parse the page source with BeautifulSoup
+    registration_soup = BeautifulSoup(page_source, 'html.parser')
+    # Save page source to a text file
+    with open('page_source.html', 'w', encoding='utf-8') as file:
+        file.write(page_source)
+    categories = [category.text.strip() for category in registration_soup.find_all('div', class_='ticket-details')]
+    print(f"Categories: {categories}")
+
+    # Audience Type
+    audience_type_tag = main_soup.find('div', class_='audience-type')
+    audience_type = audience_type_tag.text.strip() if audience_type_tag else "N/A"
+    print(f"Audience type: {audience_type}")
+
+    # Scrape schedule from agenda page
+    print(f"Fetching agenda page: {agenda_url}")
+    agenda_response = requests.get(agenda_url)
+    agenda_soup = BeautifulSoup(agenda_response.content, 'html.parser')
+    
+    
+    # Scrape schedule
+    schedule_tags = agenda_soup.find_all('h3', class_='sc-dab8fe09-5 fwiXyw')
+    
+    schedule = [tag.text.strip() for tag in schedule_tags]
+    schedule_text = ', '.join(schedule) if schedule else "N/A"
+    print(f"Agenda/Schedule: {schedule_text}")
+
+    # Scrape registration page
+    print(f"Fetching registration page: {registration_url}")
+    
+
+    # Find the <span> element with class 'label-text' and data-test attribute 'rf-form-element-label'
+    registration_details = registration_soup.find('div','input-wrapper').text.strip()
+    print(f"registration detail : {registration_details}")
+    #pricing
+    pricing = [price.text.strip() for price in registration_soup.find_all('h4', class_='fs-40')]
+    print(f"Pricings: {pricing}")
+
+    print("Finished scraping Event 5.")
+    
+    return {
+        'Event Name': event_name,
+        'Event Date(s)': event_date,
+        'Location': location,
+        'Website URL': main_url,
+        'Description': description,
+        'Key Speakers': key_speakers,
+        'Agenda/Schedule': schedule_text,
+        'Registration Details': registration_details,
+        'Pricing': pricing,
+        'Categories': categories,
+        'Audience type': audience_type
+    }
+
 
